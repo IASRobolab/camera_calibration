@@ -1,3 +1,6 @@
+'''
+This script is used to find intrinsic, extrinsic and distortion parameters from a camera
+'''
 import pdb
 from camera_utils.camera_init import IntelRealsense
 import cv2
