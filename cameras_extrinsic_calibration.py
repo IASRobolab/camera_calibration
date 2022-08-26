@@ -4,7 +4,7 @@ from chessboard_pose_estimation import chessboard_pose_estimation
 
 def extrinsic_calibration(cameras, chess_size, chess_square_size):
     '''
-    @brief: this function perform the extrinsic calibration between a list of cameras
+    @brief: this function perform the extrinsic calibration between a list of cameras.
 
     @param cameras [mandatory]: [list] is a list of Camera type. see camera_utils.camera_init for more info.
 
