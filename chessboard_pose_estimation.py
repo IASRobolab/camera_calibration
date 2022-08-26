@@ -1,20 +1,17 @@
-from __future__ import barry_as_FLUFL
-import pdb
-
 from camera_utils.camera_init import IntelRealsense
 import cv2
 import numpy as np
 
-def chessboard_pose_estimation(camera, chessboard_size, chess_square_size = 10, display_frame = False):
+def chessboard_pose_estimation(camera, chessboard_size, chess_square_size, display_frame = False):
     '''
-    @brief this function returns the estimate of chessboard position and orientation wrt the camera.
+    @brief This function returns the estimate of chessboard position and orientation wrt the camera.
 
-    @param camera: [mandatory] is an Object of Camera type (e.g. IntelRealsense, Zed). 
+    @param camera [mandatory]: is an Object of Camera type (e.g. IntelRealsense, Zed). 
     see camera_utils.camera_init for more info.
 
-    @param chessboard_size: [mandatory] is the number of chessboard corners in tuple form i.e. (length, width)
+    @param chessboard_size [mandatory]: is the number of chessboard corners in tuple form i.e. (length, width)
 
-    @param chess_square_size: is the length  of a chessboard square in mm.
+    @param chess_square_size [mandatory]: is the length  of a chessboard square in mm.
 
     @param display_frame: boolean value to display in 2D plane the frame d
 
