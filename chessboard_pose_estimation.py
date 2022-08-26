@@ -23,12 +23,14 @@ def chessboard_pose_estimation(camera, chessboard_size, chess_square_size, displ
     mtx = np.array([[intr['fx'], 0, intr['px']], [0, intr['fy'], intr['py']], [0, 0, 1]])
     dist = np.array([[0., 0., 0., 0., 0.]])
 
-    mm2cm = 10 # scaling factor from mm to cm
+    mm2m = 1000 # scaling factor from mm to cm
     # initialize criteria, object points and axis for solving PnP problem
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
     objp = np.zeros((chessboard_size[0]*chessboard_size[1],3), np.float32)
     objp[:,:2] = np.mgrid[0:chessboard_size[0],0:chessboard_size[1]].T.reshape(-1,2) * chess_square_size / mm2m
 
+    if display_frame:
+        cv2.namedWindow('img', cv2.WINDOW_NORMAL)
 
     pose_found = False
     while not pose_found:
@@ -48,22 +50,21 @@ def chessboard_pose_estimation(camera, chessboard_size, chess_square_size, displ
             rot_matrix = cv2.Rodrigues(rot_vec)[0]
 
             ## Print reference frame on image plane ##
+            # !!Important!! the zed direction on the image is projected in the opposite size to make it more look friendly
+            # in reality it points in the other direction
             if display_frame:
                 # project 3D points to image plane
                 axis = np.float32([[3,0,0], [0,3,0], [0,0,-3]]).reshape(-1,3)
                 imgpts, jac = cv2.projectPoints(axis, rot_vec, trans_vec, mtx, dist)
                 corner = tuple(corners2[0].ravel().astype(int))
 
-                img = cv2.line(img, corner, tuple(imgpts[0].ravel().astype(int)), (255,0,0), 5)
+                img = cv2.line(img, corner, tuple(imgpts[0].ravel().astype(int)), (0,0,255), 5)
                 img = cv2.line(img, corner, tuple(imgpts[1].ravel().astype(int)), (0,255,0), 5)
-                img = cv2.line(img, corner, tuple(imgpts[2].ravel().astype(int)), (0,0,255), 5)
+                img = cv2.line(img, corner, tuple(imgpts[2].ravel().astype(int)), (255,0,0), 5)
                 cv2.imshow('img', img)
 
-                if cv2.waitKey(0) == ord('q'):
-                    print("Calibration stopped.")
+                if cv2.waitKey(1) == ord('q'):
+                    print("Pose estimation stopped.")
                     exit(0)
 
-        cv2.destroyAllWindows()
-        return rot_matrix, trans_vec
-
-
+    return rot_matrix, trans_vec
