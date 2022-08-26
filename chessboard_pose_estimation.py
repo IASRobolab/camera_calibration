@@ -27,7 +27,8 @@ def chessboard_pose_estimation(camera, chessboard_size, chess_square_size, displ
     # initialize criteria, object points and axis for solving PnP problem
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
     objp = np.zeros((chessboard_size[0]*chessboard_size[1],3), np.float32)
-    objp[:,:2] = np.mgrid[0:9,0:6].T.reshape(-1,2) * chess_square_size / mm2cm
+    objp[:,:2] = np.mgrid[0:chessboard_size[0],0:chessboard_size[1]].T.reshape(-1,2) * chess_square_size / mm2m
+
 
     pose_found = False
     while not pose_found:
