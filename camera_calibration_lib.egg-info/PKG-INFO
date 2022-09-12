@@ -1,7 +1,0 @@
-Metadata-Version: 2.1
-Name: camera-calibration-lib
-Version: 1.0.0
-Summary: This package contains function for camera intrinsic and extrinsic calibration.
-Maintainer: Federico Rollo
-Maintainer-email: rollo.f96@gmail.com
-License: GNU GENERAL PUBLIC LICENSE v3
