@@ -64,7 +64,7 @@ def chessboard_pose_estimation(camera, chessboard_size, chess_square_size, displ
                 img = cv2.line(img, corner, tuple(imgpts[2].ravel().astype(int)), (255,0,0), 5)
                 cv2.imshow('img', img)
 
-                if cv2.waitKey(1) == ord('q'):
+                if cv2.waitKey(0) == ord('q'):
                     print("Pose estimation stopped.")
                     exit(0)
 

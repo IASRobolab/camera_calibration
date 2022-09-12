@@ -1,0 +1,14 @@
+README.md
+setup.cfg
+setup.py
+camera_calibration_lib/__init__.py
+camera_calibration_lib/camera_calibration.py
+camera_calibration_lib/cameras_extrinsic_calibration.py
+camera_calibration_lib/chessboard_pose_estimation.py
+camera_calibration_lib.egg-info/PKG-INFO
+camera_calibration_lib.egg-info/SOURCES.txt
+camera_calibration_lib.egg-info/dependency_links.txt
+camera_calibration_lib.egg-info/requires.txt
+camera_calibration_lib.egg-info/top_level.txt
+camera_calibration_lib.egg-info/zip-safe
+test/test_two_cameras.py

@@ -1,8 +1,8 @@
 import numpy as np
 
-from chessboard_pose_estimation import chessboard_pose_estimation
+from camera_calibration_lib.chessboard_pose_estimation import chessboard_pose_estimation
 
-def extrinsic_calibration(cameras, chess_size, chess_square_size):
+def extrinsic_calibration(cameras, chess_size, chess_square_size, display_frame = False):
     '''
     @brief: this function perform the extrinsic calibration between a list of cameras.
 
@@ -25,7 +25,9 @@ def extrinsic_calibration(cameras, chess_size, chess_square_size):
     cam_number = 1
     for camera in cameras:
         print("Chessboard pose estimation for camera %d" % cam_number)
-        rot_mat, trans_vec = chessboard_pose_estimation(camera, chess_size, chess_square_size, False)
+        rot_mat, trans_vec = chessboard_pose_estimation(camera, chess_size, chess_square_size, display_frame)
+        print("rot_mat", rot_mat)
+        print("trans_vec", trans_vec)
         hom_mat = np.eye(4)
         hom_mat[:3, :3] = rot_mat
         hom_mat[:3, 3:] = trans_vec
