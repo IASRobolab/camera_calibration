@@ -24,6 +24,6 @@ if __name__ == "__main__":
 
     print("\033[92mLoop Running. \nTo stop the loop press q and enter.\033[0m")
     while not stop_loop('q'):
-        cam1_H_camX = extrinsic_calibration([camera1, camera2], chess_size, chess_square_size, display_frame = False)
+        cam1_H_camX = extrinsic_calibration([camera1, camera2], chess_size, chess_square_size, loops = 4, display_frame = False)
         print(cam1_H_camX)
 
