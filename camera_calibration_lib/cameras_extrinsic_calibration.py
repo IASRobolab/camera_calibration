@@ -1,8 +1,9 @@
 import numpy as np
+from scipy.spatial.transform import Rotation as R
 
-from chessboard_pose_estimation import chessboard_pose_estimation
+from camera_calibration_lib.chessboard_pose_estimation import chessboard_pose_estimation
 
-def extrinsic_calibration(cameras, chess_size, chess_square_size):
+def extrinsic_calibration(cameras, chess_size, chess_square_size, loops = 1, display_frame = False):
     '''
     @brief: this function perform the extrinsic calibration between a list of cameras.
 
@@ -11,6 +12,10 @@ def extrinsic_calibration(cameras, chess_size, chess_square_size):
     @param chessboard_size [mandatory]: [tuple(int)] is the number of chessboard corners in tuple form i.e. (length, width).
 
     @param chess_square_size [mandatory]: [int] is the length of a chessboard square in mm.
+
+    @param loops: [int] number of samples for computing average poses
+
+    @param display_frame: [boolean] flag to allow display of image and frame
 
     @return: cam1_H_camX [list(np.array(4x4))] is a list of homogeneous transformation of all the cameras in the cameras list with respect to the first camera of the list. 
     '''
@@ -25,10 +30,25 @@ def extrinsic_calibration(cameras, chess_size, chess_square_size):
     cam_number = 1
     for camera in cameras:
         print("Chessboard pose estimation for camera %d" % cam_number)
-        rot_mat, trans_vec = chessboard_pose_estimation(camera, chess_size, chess_square_size, False)
+        if loops == 1:
+            rot_mat, trasl_vec = chessboard_pose_estimation(camera, chess_size, chess_square_size, display_frame)
+        else:
+            rots = []
+            trasls = []
+            for k in range(loops):
+                rot_k, trasl_k = chessboard_pose_estimation(camera, chess_size, chess_square_size, display_frame)
+                trasls.append(trasl_k)
+                rots.append(rot_k)
+            rots = np.array(rots)
+            trasls = np.array(trasls)
+            rot_mat = np.mean(rots, 0)
+            trasl_vec = np.mean(trasls, 0)
+
+        print("rot_mat", rot_mat)
+        print("det(rot_mat)", np.linalg.det(rot_mat))
         hom_mat = np.eye(4)
         hom_mat[:3, :3] = rot_mat
-        hom_mat[:3, 3:] = trans_vec
+        hom_mat[:3, 3:] = trasl_vec
         homogeneous_matrices.append(hom_mat)
         cam_number += 1
     print()

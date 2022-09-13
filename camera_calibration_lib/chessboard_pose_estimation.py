@@ -13,9 +13,9 @@ def chessboard_pose_estimation(camera, chessboard_size, chess_square_size, displ
 
     @param chess_square_size [mandatory]: is the length  of a chessboard square in mm.
 
-    @param display_frame: boolean value to display in 2D plane the frame d
+    @param display_frame: [boolean] flag to allow display of image and frame
 
-    @return rot_matrix is a 3x3 rotation matrix, trans_vec is a 3x1 translation vector. 
+    @return rot_matrix is a 3x3 rotation matrix, trasl_vec is a 3x1 translation vector. 
     They represent the pose of the camera wrt the chessboard top-left angle
     '''
     # get intrinsics params and distortion params
@@ -45,7 +45,7 @@ def chessboard_pose_estimation(camera, chessboard_size, chess_square_size, displ
             corners2 = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
 
             # Find the rotation and translation vectors.
-            pose_found, rot_vec, trans_vec = cv2.solvePnP(objp, corners2, mtx, dist)
+            pose_found, rot_vec, trasl_vec = cv2.solvePnP(objp, corners2, mtx, dist)
 
             # Compute rotation matrics from rotation vector
             rot_matrix = cv2.Rodrigues(rot_vec)[0]
@@ -56,7 +56,7 @@ def chessboard_pose_estimation(camera, chessboard_size, chess_square_size, displ
             if display_frame:
                 # project 3D points to image plane
                 axis = np.float32([[3,0,0], [0,3,0], [0,0,-3]]).reshape(-1,3)
-                imgpts, jac = cv2.projectPoints(axis, rot_vec, trans_vec, mtx, dist)
+                imgpts, jac = cv2.projectPoints(axis, rot_vec, trasl_vec, mtx, dist)
                 corner = tuple(corners2[0].ravel().astype(int))
 
                 img = cv2.line(img, corner, tuple(imgpts[0].ravel().astype(int)), (0,0,255), 5)
@@ -64,8 +64,8 @@ def chessboard_pose_estimation(camera, chessboard_size, chess_square_size, displ
                 img = cv2.line(img, corner, tuple(imgpts[2].ravel().astype(int)), (255,0,0), 5)
                 cv2.imshow('img', img)
 
-                if cv2.waitKey(1) == ord('q'):
+                if cv2.waitKey(0) == ord('q'):
                     print("Pose estimation stopped.")
                     exit(0)
 
-    return rot_matrix, trans_vec
+    return rot_matrix, trasl_vec
