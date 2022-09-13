@@ -132,3 +132,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# visual studio package settings dir
+.vscode
+
+# personal test files
+test_*
