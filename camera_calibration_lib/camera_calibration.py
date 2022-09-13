@@ -4,6 +4,7 @@ This script is used to find intrinsic, extrinsic and distortion parameters from 
 import cv2
 import numpy as np
 
+
 def camera_calibration(camera, chessboard_size, chess_square_size, display_chess_pattern=False):
     '''
     @brief: this function perform the intrinsic and extrinsic calibration of a camera.
