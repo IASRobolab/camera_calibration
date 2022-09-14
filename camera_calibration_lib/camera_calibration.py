@@ -23,10 +23,10 @@ def camera_calibration(camera, chessboard_size, chess_square_size, display_chess
     # termination criteria
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
     # scaling factor from mm to cm
-    mm2m = 1000 
+    mm2m = 1e-3 
     # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
     objp = np.zeros((chessboard_size[0]*chessboard_size[1],3), np.float32)
-    objp[:,:2] = np.mgrid[0:chessboard_size[0],0:chessboard_size[1]].T.reshape(-1,2) * chess_square_size / mm2m
+    objp[:,:2] = np.mgrid[0:chessboard_size[0],0:chessboard_size[1]].T.reshape(-1,2) * chess_square_size * mm2m
 
     # Arrays to store object points and image points from all the images.
     objpoints = [] # 3d point in real world space
