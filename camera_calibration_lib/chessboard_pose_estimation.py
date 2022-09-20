@@ -66,6 +66,6 @@ def chessboard_pose_estimation(camera, chessboard_size, chess_square_size, displ
 
                 if cv2.waitKey(0) == ord('q'):
                     print("Pose estimation stopped.")
-                    exit(0)
+                    cv2.destroyAllWindows()
 
     return rot_matrix, trasl_vec
