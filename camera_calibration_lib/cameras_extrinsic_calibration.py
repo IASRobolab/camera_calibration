@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.spatial.transform import Rotation as R
+from tqdm import tqdm
 
 from camera_calibration_lib.chessboard_pose_estimation import chessboard_pose_estimation
 
@@ -35,7 +36,7 @@ def extrinsic_calibration(cameras, chess_size, chess_square_size, loops = 1, dis
         else:
             rots = []
             trasls = []
-            for k in range(loops):
+            for k in tqdm(range(loops)):
                 rot_k, trasl_k = chessboard_pose_estimation(camera, chess_size, chess_square_size, display_frame)
                 trasls.append(trasl_k)
                 rots.append(rot_k)
