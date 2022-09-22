@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 from camera_calibration_lib.chessboard_pose_estimation import chessboard_pose_estimation
 
-def extrinsic_calibration(cameras, chess_size, chess_square_size, loops = 1, display_frame = False):
+def extrinsic_calibration(cameras, chess_size, chess_square_size, loops = 1, wait_key = False, display_frame = False):
     '''
     @brief: this function perform the extrinsic calibration between a list of cameras.
 
@@ -18,6 +18,8 @@ def extrinsic_calibration(cameras, chess_size, chess_square_size, loops = 1, dis
 
     @param display_frame: [boolean] flag to allow display of image and frame
 
+    @param wait_key: [boolean] flag to set the wait-for-user-input modality
+
     @return: cam1_H_camX [list(np.array(4x4))] is a list of homogeneous transformation of all the cameras in the cameras list with respect to the first camera of the list. 
     '''
     assert(len(cameras) >= 2 and "You must pass at least two cameras in the cameras list")
@@ -30,6 +32,8 @@ def extrinsic_calibration(cameras, chess_size, chess_square_size, loops = 1, dis
     cam1_H_camX_samples = []
     for k in tqdm(range(loops)):
         homogeneous_matrices = [] # store chessboard poses from each camera
+        if wait_key:
+                input("Position the chessboard and press any key")
         for camera in cameras:
             rot_mat, trasl_vec = chessboard_pose_estimation(camera, chess_size, chess_square_size, display_frame)
             hom_mat = np.eye(4)
