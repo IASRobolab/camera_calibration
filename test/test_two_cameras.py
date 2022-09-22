@@ -15,15 +15,18 @@ def stop_loop(stop_entry):
     return False
 
 if __name__ == "__main__":
-
-    camera1 = IntelRealsense(serial_number='023322061667')
+    # 023322061667 : D415
+    # 023322062736 : D415
+    # 049122251418 : D455
+    camera1= IntelRealsense(serial_number='049122251418')
     camera2 = IntelRealsense(serial_number='023322062736')
-    
-    chess_size = (9, 6)
-    chess_square_size = 25
+
+    chess_size = (5, 4)
+    chess_square_size = 40
 
     print("\033[92mLoop Running. \nTo stop the loop press q and enter.\033[0m")
     while not stop_loop('q'):
-        cam1_H_camX = extrinsic_calibration([camera1, camera2], chess_size, chess_square_size, loops = 4, display_frame = False)
+        cam1_H_camX = extrinsic_calibration([camera1, camera2], chess_size, chess_square_size, loops = 10, display_frame = True)
+        print("len(cam1_H_camX)", len(cam1_H_camX))
         print(cam1_H_camX)
 

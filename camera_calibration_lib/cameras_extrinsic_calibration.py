@@ -27,39 +27,28 @@ def extrinsic_calibration(cameras, chess_size, chess_square_size, loops = 1, dis
         for i in range(10):
             camera.get_rgb()
     
-    homogeneous_matrices = []
-    cam_number = 1
-    for camera in cameras:
-        print("Chessboard pose estimation for camera %d" % cam_number)
-        if loops == 1:
+    cam1_H_camX_samples = []
+    for k in tqdm(range(loops)):
+        homogeneous_matrices = [] # store chessboard poses from each camera
+        for camera in cameras:
             rot_mat, trasl_vec = chessboard_pose_estimation(camera, chess_size, chess_square_size, display_frame)
-        else:
-            rots = []
-            trasls = []
-            for k in tqdm(range(loops)):
-                rot_k, trasl_k = chessboard_pose_estimation(camera, chess_size, chess_square_size, display_frame)
-                trasls.append(trasl_k)
-                rots.append(rot_k)
-            rots = np.array(rots)
-            trasls = np.array(trasls)
-            rot_mat = np.mean(rots, 0)
-            trasl_vec = np.mean(trasls, 0)
+            hom_mat = np.eye(4)
+            hom_mat[:3, :3] = rot_mat
+            hom_mat[:3, 3:] = trasl_vec
+            homogeneous_matrices.append(hom_mat)
 
-        print("rot_mat", rot_mat)
-        print("det(rot_mat)", np.linalg.det(rot_mat))
-        hom_mat = np.eye(4)
-        hom_mat[:3, :3] = rot_mat
-        hom_mat[:3, 3:] = trasl_vec
-        homogeneous_matrices.append(hom_mat)
-        cam_number += 1
-    print()
-    
-    cam1_H_camX = [] # is a list of homogeneous transforamtion between cam1 and all the other cam in cameras list
-    H_ref = homogeneous_matrices[0]
-    for hom_mat in homogeneous_matrices:
-        H_inv = np.linalg.inv(hom_mat)
-        cam1_H_currentCam = np.matmul(H_ref, H_inv)
-        cam1_H_camX.append(cam1_H_currentCam)
-    
-    return cam1_H_camX[1:]
+        cam1_H_camX = [] # is a list of homogeneous transforamtion between cam1 and all the other cam in cameras list
+        H_ref = homogeneous_matrices[0]
+        for hom_mat in homogeneous_matrices:
+            H_inv = np.linalg.inv(hom_mat)
+            cam1_H_currentCam = np.matmul(H_ref, H_inv)
+            cam1_H_camX.append(cam1_H_currentCam)
         
+        cam1_H_camX_samples.append(cam1_H_camX[1:])
+
+    cam1_H_camX_samples = np.array(cam1_H_camX_samples)
+    cam1_H_camX_mean = np.mean(cam1_H_camX_samples, 0)
+    new_cam1_H_camX = []
+    for i in range(cam1_H_camX_mean.shape[0]):
+        new_cam1_H_camX.append(cam1_H_camX_mean[i])
+    return new_cam1_H_camX
