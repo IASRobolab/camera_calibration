@@ -33,7 +33,7 @@ ___
 - __chessboard_pose_estimation__: this function returns the estimate of chessboard position and orientation w.r.t. the camera get_frame
 - __extrinsic_calibration__: this function perform the extrinsic calibration between a list of cameras
 
-Inside the __example__ folder you can find a simple script to perform extrinsic calibration of two IntelRealsense cameras: __test_two_cameras.py__.
+Inside the __example__ folder you can find a simple script to perform extrinsic calibration of two IntelRealsense cameras: __calibrate_two_cameras.py__.
 
 ## Authors
 ___
