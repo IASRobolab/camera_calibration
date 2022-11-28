@@ -35,6 +35,10 @@ ___
 
 Inside the __example__ folder you can find a simple script to perform extrinsic calibration of two IntelRealsense cameras: __calibrate_two_cameras.py__.
 
+## License
+___
+Distributed under the ```GPLv3``` License. See [LICENSE](LICENSE) for more information.
+
 ## Authors
 ___
 The package is provided by:
